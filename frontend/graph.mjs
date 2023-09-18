@@ -1,6 +1,6 @@
 const graphDiv = document.getElementById('graph');
 
-fetch("http://localhost:8080/data")
+fetch("https://sarthak-service-dssd.onrender.com")
     .then(async res => {
         const data = await res.json();
 
