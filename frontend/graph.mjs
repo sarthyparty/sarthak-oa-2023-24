@@ -1,8 +1,39 @@
-const graphDiv = document.getElementById("graph");
+const graphDiv = document.getElementById('graph');
 
-fetch(
-    "https://oa-2023-24-backend.onrender.com" //use "http://localhost:3000" if running sample express backend locally, or replace with your own backend endpoint url
-).then(async res => {
-    Plotly.newPlot( graphDiv, [ await res.json() ]); 
-})
+fetch("http://localhost:8080/data")
+    .then(async res => {
+        const data = await res.json();
 
+        const n = 60;
+
+        const benchTrace = {
+            x: data.age.filter((_, i) => i % n === 0),
+            y: data.bench.filter((_, i) => i % n === 0),
+            mode: 'markers',
+            name: 'Bench',
+            type: 'scatter',
+        };
+
+        const squatTrace = {
+            x: data.age.filter((_, i) => i % n === 0),
+            y: data.squat.filter((_, i) => i % n === 0),
+            mode: 'markers',
+            name: 'Squat',
+            type: 'scatter',
+        };
+
+        const layout = {
+            title: 'Powerlifting Stats By Age',
+            xaxis: {
+                title: 'Age',
+            },
+            yaxis: {
+                title: 'Weight',
+            },
+        };
+
+        Plotly.newPlot(graphDiv, [benchTrace, squatTrace], layout);
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
